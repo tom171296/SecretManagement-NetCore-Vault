@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+    consul:
+        image: 'consul:1.7.1'
+        ports: 
+            - "8500:8500"
+        # volumes:
+        #     - ./consul-leader:/consul/data
+        networks:
+            - vault
+  
+    vault:
+        build:
+            context: './VaultConfig'
+        ports: 
+            - "8200:8200"
+        # volumes:
+        #     - ./auditLog:/vault/logs
+        #     - ./fileStorage:/vault/file
+        environment: 
+            VAULT_API_ADDR: 'http://vault:8200'
+            VAULT_CLUSTER_ADDR: 'http://vault:8201'
+            VAULT_CONSUL_ADDRESS: 'http://consul:8500'
+        cap_add:
+            - IPC_LOCK
+        networks:
+            - vault
+        depends_on: 
+            - consul
+
+networks:
+    vault:
