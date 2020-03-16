@@ -1,13 +1,13 @@
 # Key shard sharing using PGP
 
-## prerequisite
+## Prerequisite
 
 - [Chocolatey](https://chocolatey.org/docs/installation) is installed
 
 
 ## Generate PGP key pair
 
-- Fire up powershell and install GnuPG using the following command:
+- Fire up powershell (administrative) and install GnuPG using the following command:
 `choco install gnupg`
 
 - Refresh powershell environment by executing: `refreshenv`
