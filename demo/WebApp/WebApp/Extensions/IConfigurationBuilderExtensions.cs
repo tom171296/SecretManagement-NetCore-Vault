@@ -23,7 +23,7 @@ namespace WebApp.Extensions
                 IVaultClient vaultClient = new VaultClient(authSettings);
 
                 var vaultSecrets = vaultClient.V1.Secrets.KeyValue.V2
-                    .ReadSecretAsync("secrets/kv/foo")
+                    .ReadSecretAsync("test/path")
                     .Result
                     .Data
                     .Data
