@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "a54c6f5c-e617-4e22-9391-c11cb36f9359",
+		"name": "VaultRabbitMQDemo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. enable audit trail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Vault-Token",
+						"value": "myroot",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"file\",\r\n  \"options\": {\r\n    \"file_path\": \"/vault/logs/vault.log\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8200/v1/sys/audit/access-trail",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"v1",
+						"sys",
+						"audit",
+						"access-trail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Enable RabbitMQ",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Vault-Token",
+						"value": "myroot",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"type\": \"rabbitmq\",\r\n  \"config\": {\r\n    \"force_no_cache\": true\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8200/v1/sys/mounts/rabbitmq",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"v1",
+						"sys",
+						"mounts",
+						"rabbitmq"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Connect Vault to RabbitMQ",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Vault-Token",
+						"value": "myroot",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"connection_uri\": \"http://rabbitmq:15672\",\r\n  \"username\": \"admin\",\r\n  \"password\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8200/v1/rabbitmq/config/connection",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"v1",
+						"rabbitmq",
+						"config",
+						"connection"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Configure lease duration",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Vault-Token",
+						"type": "text",
+						"value": "myroot"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"ttl\": 90,\r\n  \"max_ttl\": 3600\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8200/v1/rabbitmq/config/lease",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"v1",
+						"rabbitmq",
+						"config",
+						"lease"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Create RabbitMQ role",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Vault-Token",
+						"value": "myroot",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"tags\": \"administrator\",\r\n  \"vhosts\": \"{\\\"/\\\": {\\\"configure\\\":\\\".*\\\", \\\"write\\\":\\\".*\\\", \\\"read\\\": \\\".*\\\"}}\",\r\n  \"vhost_topics\": \"{\\\"/\\\": {\\\"amq.topic\\\": {\\\"write\\\":\\\".*\\\", \\\"read\\\": \\\".*\\\"}}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8200/v1/rabbitmq/roles/my-app",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"v1",
+						"rabbitmq",
+						"roles",
+						"my-app"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. Get RabbitMQ credentials",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Vault-Token",
+						"type": "text",
+						"value": "myroot"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8200/v1/rabbitmq/creds/my-app",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"v1",
+						"rabbitmq",
+						"creds",
+						"my-app"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

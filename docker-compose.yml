@@ -14,5 +14,17 @@ services:
         networks:
             - vault
 
+    rabbitmq:
+        image: "rabbitmq:3.8.3-management-alpine"
+        ports: 
+            - '5672:5672'
+            - '15672:15672'
+        environment:
+            AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+            RABBITMQ_DEFAULT_USER: 'admin'
+            RABBITMQ_DEFAULT_PASS: 'admin'
+        networks:
+            - vault
+
 networks:
     vault:
