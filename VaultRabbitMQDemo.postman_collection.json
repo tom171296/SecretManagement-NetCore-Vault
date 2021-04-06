@@ -128,7 +128,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"ttl\": 90,\r\n  \"max_ttl\": 3600\r\n}",
+					"raw": "{\r\n  \"ttl\": 60,\r\n  \"max_ttl\": 3600\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -217,6 +217,5 @@
 			},
 			"response": []
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
